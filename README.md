@@ -1,10 +1,10 @@
 %%{init: {
-    "theme": "default",
+    "theme": "base",
     "themeVariables": {
         "primaryColor": "#4C8BF5",
         "primaryTextColor": "#FFFFFF",
         "primaryBorderColor": "#1B4DC3",
-        
+
         "secondaryColor": "#F59E0B",
         "secondaryTextColor": "#FFFFFF",
         "secondaryBorderColor": "#B45309",
@@ -17,7 +17,6 @@
         "textColor": "#111111"
     }
 }}%%
-
 classDiagram
 
     class PaymentStrategy {
@@ -80,16 +79,9 @@ classDiagram
         +addObserver(o: Observer) void
         +removeObserver(o: Observer) void
         +notifyObservers(p: Payment) void
-        +processPayment(amount: double) void
+        +processPayment(amount: double) Payment
     }
 
     PaymentProcessor --> PaymentStrategy
     PaymentProcessor o-- Observer
     PaymentProcessor --> Payment
-
-
-%% COLORS APPLIED BY STYLE TAGS
-class PaymentStrategy,Observer tertiary
-class CardStrategy,YapeStrategy,CashStrategy primary
-class UserAppObserver,AccountingObserver secondary
-class Payment,PaymentProcessor primary
