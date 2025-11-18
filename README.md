@@ -1,74 +1,95 @@
+%%{init: {
+    "theme": "default",
+    "themeVariables": {
+        "primaryColor": "#4C8BF5",
+        "primaryTextColor": "#FFFFFF",
+        "primaryBorderColor": "#1B4DC3",
+        
+        "secondaryColor": "#F59E0B",
+        "secondaryTextColor": "#FFFFFF",
+        "secondaryBorderColor": "#B45309",
+
+        "tertiaryColor": "#10B981",
+        "tertiaryTextColor": "#FFFFFF",
+        "tertiaryBorderColor": "#047857",
+
+        "lineColor": "#333333",
+        "textColor": "#111111"
+    }
+}}%%
+
 classDiagram
-    %% Interfaces / Estrategia
+
     class PaymentStrategy {
-      <<interface>>
-      +pay(amount: double) double
-      +getName() String
+        <<interface>>
+        +pay(amount: double) double
+        +getName() String
     }
 
     class CardStrategy {
-      +pay(amount: double) double
-      +getName() String
+        +pay(amount: double) double
+        +getName() String
     }
 
     class YapeStrategy {
-      +pay(amount: double) double
-      +getName() String
+        +pay(amount: double) double
+        +getName() String
     }
 
     class CashStrategy {
-      +pay(amount: double) double
-      +getName() String
+        +pay(amount: double) double
+        +getName() String
     }
 
     PaymentStrategy <|.. CardStrategy
     PaymentStrategy <|.. YapeStrategy
     PaymentStrategy <|.. CashStrategy
 
-    %% Payment (modelo)
-    class Payment {
-      -baseAmount: double
-      -totalAmount: double
-      -methodName: String
-      +getBaseAmount() double
-      +getTotalAmount() double
-      +getMethodName() String
-      +toString() String
-    }
-
-    %% Observer
     class Observer {
-      <<interface>>
-      +update(payment: Payment) void
-      +getName() String
+        <<interface>>
+        +update(payment: Payment) void
+        +getName() String
     }
 
     class UserAppObserver {
-      +update(payment: Payment) void
-      +getName() String
+        +update(payment: Payment) void
+        +getName() String
     }
 
     class AccountingObserver {
-      +update(payment: Payment) void
-      +getName() String
+        +update(payment: Payment) void
+        +getName() String
     }
 
     Observer <|.. UserAppObserver
     Observer <|.. AccountingObserver
 
-    %% PaymentProcessor (Subject)
-    class PaymentProcessor {
-      -observers: List~Observer~
-      -strategy: PaymentStrategy
-      +PaymentProcessor(strategy: PaymentStrategy)
-      +setStrategy(s: PaymentStrategy) void
-      +addObserver(o: Observer) void
-      +removeObserver(o: Observer) void
-      +notifyObservers(p: Payment) void
-      +processPayment(amount: double) void
+    class Payment {
+        -baseAmount: double
+        -totalAmount: double
+        -methodName: String
+        +getBaseAmount() double
+        +getTotalAmount() double
+        +getMethodName() String
     }
 
-    %% Relaciones
-    PaymentProcessor --> PaymentStrategy : uses
-    PaymentProcessor "1" o-- "*" Observer : manages
-    PaymentProcessor --> Payment : creates
+    class PaymentProcessor {
+        -observers: List~Observer~
+        -strategy: PaymentStrategy
+        +setStrategy(s: PaymentStrategy) void
+        +addObserver(o: Observer) void
+        +removeObserver(o: Observer) void
+        +notifyObservers(p: Payment) void
+        +processPayment(amount: double) void
+    }
+
+    PaymentProcessor --> PaymentStrategy
+    PaymentProcessor o-- Observer
+    PaymentProcessor --> Payment
+
+
+%% COLORS APPLIED BY STYLE TAGS
+class PaymentStrategy,Observer tertiary
+class CardStrategy,YapeStrategy,CashStrategy primary
+class UserAppObserver,AccountingObserver secondary
+class Payment,PaymentProcessor primary
